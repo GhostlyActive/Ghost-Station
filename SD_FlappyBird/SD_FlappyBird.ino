@@ -82,8 +82,8 @@ void Bird::setGravity(int gravity) {
   gravity = gravity;
 }
 
-void Bird::setJumpSpeed(float _jumpSpeed) {
-  jumpSpeed = _jumpSpeed;
+void Bird::setJumpSpeed(float jumpSpeed) {
+  jumpSpeed = jumpSpeed;
 }
 
 void Bird::draw() {
