@@ -8,7 +8,9 @@ Ghost Station is a project that allows you to play classic games by swapping out
 4.) Restart the Arduino after copying the game to the SD card. The game should be playable now.
 <br>
 <br>
-<b>Current work: </b>Intro video when switching games (like on the Playstation 2), improve games, more games, better hardware case . . . 
+<b>Already Done: Intro video when switching games (like on the Playstation 2)
+<br>
+<b>Current work: </b>Improve games, more games, better hardware case . . . 
 <br>
 <br>
 <p align="center">

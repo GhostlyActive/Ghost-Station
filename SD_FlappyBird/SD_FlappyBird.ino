@@ -193,15 +193,76 @@ class Game{
 
 void Game::gameOver() {
   display.fillScreen(BLACK);
-  display.setCursor(35, SCREEN_HEIGHT/2);
+  display.setCursor(7, SCREEN_HEIGHT/2);
+  display.setTextSize(2);
   display.setTextColor(WHITE);
   display.print("Game Over!");
   while (true) {}
 }
 
+class GameIntro
+{
+  public:
+    unsigned long FirstTriangles() {
+      unsigned long start;
+      int           n, i, cx = display.width()  / 2 - 1,
+                          cy = display.height() / 2 - 1;
+
+      display.fillScreen(BLACK);
+      n     = min(cx, cy);
+      start = micros();
+      for(i=0; i<n; i+=5) {
+        display.drawTriangle(
+          cx    , cy - i, // peak
+          cx - i, cy + i, // bottom left
+          cx + i, cy + i, // bottom right
+          display.color565(i, i, i));
+      }
+  
+      return micros() - start;
+    } 
+
+    unsigned long FilledTriangles() {
+      unsigned long start, t = 0;
+      int           i, cx = display.width()  / 2 - 1,
+                    cy = display.height() / 2 - 1;
+
+    start = micros();
+    for(i=min(cx,cy); i>10; i-=5) {
+      start = micros();
+      display.fillTriangle(cx, cy - i, cx - i, cy + i, cx + i, cy + i,
+      display.color565(i*1, i*1, i*1));
+      t += micros() - start;
+      display.drawTriangle(cx, cy - i, cx - i, cy + i, cx + i, cy + i,
+      display.color565(i*2, i*2, i*2));
+       delay(100);
+      yield();
+    }
+ 
+    return t;
+  }
+
+    unsigned long IntroText()
+    { 
+      unsigned long start = micros();
+      display.setCursor(0, 40);
+      display.setTextColor(WHITE);    
+      display.setTextSize(3);
+      display.println(" Ghost");
+
+      display.setCursor(0, 70);
+      display.setTextColor(WHITE);    
+      display.setTextSize(3);
+      display.println("Station");
+
+      return micros() - start;
+    }
+};
+
 Bird bird;
 Obstacle obstacle;
 Game game;
+GameIntro intro;
 
 void setup() {
   Serial.begin(9600);
@@ -210,6 +271,16 @@ void setup() {
   randomSeed(analogRead(A0));
   pinMode(bird.getButtonPin(), INPUT_PULLUP);
   
+  // intro animation with text at the end
+  intro.FirstTriangles();
+  delay(500);
+
+  intro.FilledTriangles();
+  delay(500);
+
+  intro.IntroText();
+  delay(1000);
+  display.fillScreen(BLACK);
 }
 
 

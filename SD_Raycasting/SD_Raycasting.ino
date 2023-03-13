@@ -36,7 +36,7 @@
 #define WHITE           0xFFFF
 
 // Adafruit_SSD1351 init
-Adafruit_SSD1351 tft = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, OLED_CS, OLED_DC, OLED_RESET); 
+Adafruit_SSD1351 display = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, OLED_CS, OLED_DC, OLED_RESET); 
 
 
 class GameField {
@@ -116,25 +116,96 @@ class Player {
         int wallTop = (128 - wallHeight) / 2;
         int wallBottom = 128 - wallTop;
         int wallColor = field.gfield[(int)rayX][(int)rayY] == 1 ? BLUE : GREEN;
-        tft.writeFastVLine(x, wallTop, wallHeight, wallColor);
+        display.writeFastVLine(x, wallTop, wallHeight, wallColor);
       }
     }
 
+class GameIntro
+{ 
+  public:
+    unsigned long FirstTriangles() {
+      unsigned long start;
+      int           n, i, cx = display.width()  / 2 - 1,
+                          cy = display.height() / 2 - 1;
+
+      display.fillScreen(BLACK);
+      n     = min(cx, cy);
+      start = micros();
+      for(i=0; i<n; i+=5) {
+        display.drawTriangle(
+          cx    , cy - i, // peak
+          cx - i, cy + i, // bottom left
+          cx + i, cy + i, // bottom right
+          display.color565(i, i, i));
+      }
+  
+      return micros() - start;
+    } 
+
+    unsigned long FilledTriangles() {
+      unsigned long start, t = 0;
+      int           i, cx = display.width()  / 2 - 1,
+                    cy = display.height() / 2 - 1;
+
+    start = micros();
+    for(i=min(cx,cy); i>10; i-=5) {
+      start = micros();
+      display.fillTriangle(cx, cy - i, cx - i, cy + i, cx + i, cy + i,
+      display.color565(i*1, i*1, i*1));
+      t += micros() - start;
+      display.drawTriangle(cx, cy - i, cx - i, cy + i, cx + i, cy + i,
+      display.color565(i*2, i*2, i*2));
+       delay(100);
+      yield();
+    }
+ 
+    return t;
+  }
+
+    unsigned long IntroText()
+    { 
+      unsigned long start = micros();
+      display.setCursor(0, 40);
+      display.setTextColor(WHITE);    
+      display.setTextSize(3);
+      display.println(" Ghost");
+
+      display.setCursor(0, 70);
+      display.setTextColor(WHITE);    
+      display.setTextSize(3);
+      display.println("Station");
+
+      return micros() - start;
+    }
+};
+
+ // create the game field and player objects
+  GameField gamefield;
+  Player player;
+  GameIntro intro;
 
 
 void setup() {
-  tft.begin();
-  tft.fillScreen(BLACK);
+  display.begin();
+  display.fillScreen(BLACK);
+
+   // intro animation with text at the end
+  intro.FirstTriangles();
+  delay(500);
+
+  intro.FilledTriangles();
+  delay(500);
+
+  intro.IntroText();
+  delay(1000);
+  display.fillScreen(BLACK);
 }
 
 void loop() {
 
   // begin writing to the screen
-  tft.startWrite();
+  display.startWrite();
 
-  // create the game field and player objects
-  GameField gamefield;
-  Player player;
 
   // draw the walls of the game world
   drawWalls(player, gamefield);
@@ -144,7 +215,7 @@ void loop() {
   player.updatePosition(gamefield);
 
   // end writing to the screen
-  tft.endWrite();
+  display.endWrite();
 
   // delay to control the frame rate
   delay(20);
