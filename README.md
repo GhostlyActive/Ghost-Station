@@ -10,9 +10,12 @@ Ghost Station is a project that allows you to play classic games by swapping out
 <br>
 <b>Already Done: Intro video when switching games (like on the Playstation 2)
 <br>
-<b>Current work: </b>Improve games, more games, better hardware case . . . 
+<br>
+<b>Current work: </b>Improve games, more games, rework hardware case . . . 
 <br>
 <br>
 <p align="center">
   <img src="/Media/SD_Game_Play.gif" width = "802" alt="SD_Cards">
+  <img src="/Media/Baukasten.jpg" width = "802" alt="Baukasten">
+  <img src="/Media/Intro.gif" width = "802" alt="Intro">
 </p>
