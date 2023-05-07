@@ -16,6 +16,7 @@ Ghost Station is a project that allows you to play classic games by swapping out
 <br>
 <p align="center">
   <img src="/Media/SD_Game_Play.gif" width = "802" alt="SD_Cards">
+  <img src="/Media/AlmostFinished.jpg" width = "802" alt="AlmostFinished">
   <img src="/Media/Baukasten.jpg" width = "802" alt="Baukasten">
   <img src="/Media/Intro.gif" width = "802" alt="Intro">
 </p>
